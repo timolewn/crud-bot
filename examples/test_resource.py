@@ -1,8 +1,7 @@
 from crud_bot.resource import Resource
 
 
-class TestResource(Resource):
-    id: str
+class TestResource(Resource[str]):
     name: str
     description: str
 

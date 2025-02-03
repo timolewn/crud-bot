@@ -1,21 +1,21 @@
-from typing import Type, Callable, List, Optional
+from typing import Type, Callable, List, Optional, Generic
 
 import discord
 from discord.ext import commands
 
 from crud_bot.crud_manager import CrudManager
-from crud_bot.resource import Resource
+from crud_bot.resource import Resource, T, Identifier
 from crud_bot.data_source import DataSource
 
 
-class DiscordBot:
+class DiscordBot(Generic[T, Identifier]):
     def __init__(
         self,
         bot_token: str,
         resource_type: Type[Resource],
-        data_source: DataSource[Resource],
+        data_source: DataSource,
         command_prefix: str = "!",
-        intents: Optional[discord.Intents] = None,  # Add an optional intents parameter
+        intents: Optional[discord.Intents] = None,
     ):
         """
         Initializes the bot manager.
@@ -54,7 +54,7 @@ class DiscordBot:
             )
 
         @self.bot.command()
-        async def read(ctx, id: int):
+        async def read(ctx, id: Identifier):
             resource = self.crud_manager.read(id)
             if resource:
                 await ctx.send(
@@ -64,7 +64,7 @@ class DiscordBot:
                 await ctx.send(f"{self.resource_type.__name__} not found.")
 
         @self.bot.command()
-        async def update(ctx, id: int, *args):
+        async def update(ctx, id: Identifier, *args):
             fields = args
             resource = self.resource_type(id=id, **self._fields_from_args(fields))
             updated = self.crud_manager.update(id, resource)
@@ -76,7 +76,7 @@ class DiscordBot:
                 await ctx.send(f"{self.resource_type.__name__} not found.")
 
         @self.bot.command()
-        async def delete(ctx, id: int):
+        async def delete(ctx, id: Identifier):
             success = self.crud_manager.delete(id)
             if success:
                 await ctx.send(f"{self.resource_type.__name__} with ID {id} deleted.")

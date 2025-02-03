@@ -1,10 +1,10 @@
 from abc import abstractmethod
-from typing import List, Protocol, Generic, Optional
+from typing import List, Protocol, Optional
 
 from crud_bot.resource import T, Identifier
 
 
-class DataSource(Protocol, Generic[T]):
+class DataSource(Protocol[T, Identifier]):
     """Protocol defining data source operations."""
 
     @abstractmethod

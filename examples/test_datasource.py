@@ -3,7 +3,7 @@ from examples.test_resource import TestResource
 from crud_bot.data_source import DataSource
 
 
-class TestDataSource(DataSource[TestResource]):
+class TestDataSource(DataSource[TestResource, str]):
     def __init__(self, name: str):
         self.data: List[TestResource] = []
         self.name = name

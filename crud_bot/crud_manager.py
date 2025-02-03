@@ -4,10 +4,10 @@ from crud_bot.resource import T, Identifier
 from crud_bot.data_source import DataSource
 
 
-class CrudManager(Generic[T]):
+class CrudManager(Generic[T, Identifier]):
     """CRUD manager that operates on a data source."""
 
-    def __init__(self, data_source: DataSource[T]):
+    def __init__(self, data_source: DataSource[T, Identifier]):
         self.data_source = data_source
 
     def create(self, resource: T) -> T:
